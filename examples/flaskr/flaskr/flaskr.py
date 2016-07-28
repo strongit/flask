@@ -39,10 +39,11 @@ def connect_db():
 
 def init_db():
     """Initializes the database."""
-    db = get_db()
-    with app.open_resource('schema.sql', mode='r') as f:
-        db.cursor().executescript(f.read())
-    db.commit()
+    with app.app_context(): //不添加此句报错：RuntimeError: Working outside of application context.
+        db = get_db()
+        with app.open_resource('schema.sql', mode='r') as f:
+            db.cursor().executescript(f.read())
+        db.commit()
 
 
 @app.cli.command('initdb')
